@@ -1,0 +1,102 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+enum FileType {
+    image
+    video
+    audio
+    zip
+    document
+}
+
+enum StatusType {
+    active
+    inative
+    pending
+}
+
+model Level {
+    id        BigInt   @id @default(autoincrement())
+    name      String   @db.VarChar(50)
+    createdAt DateTime @default(now()) @map("createdAt")
+    updatedAt DateTime @updatedAt @map("updated_at")
+
+    rules  Rule[]  @relation(name: "LevelRules")
+    admins Admin[] @relation(name: "AdminLevel")
+
+    @@map("level")
+}
+
+model Rule {
+    id        BigInt    @id @default(autoincrement())
+    levelId   BigInt    @map("level_id")
+    object    String    @db.VarChar(50)
+    canCreate Boolean   @map("can_create")
+    canUpdate Boolean   @map("can_update")
+    canDelete Boolean   @map("can_delete")
+    canView   Boolean   @map("can_view")
+    createdAt DateTime  @default(now()) @map("created_at")
+    updatedAt DateTime? @updatedAt @map("updated_at")
+
+    level Level? @relation(name: "LevelRules", fields: [levelId], references: [id], onDelete: Cascade)
+
+    @@map("rule")
+}
+
+model File {
+    id        BigInt    @id @default(autoincrement())
+    type      FileType
+    filename  String    @db.VarChar(150)
+    name      String    @db.VarChar(150)
+    extension String    @db.VarChar(30)
+    mime      String    @db.VarChar(50)
+    url       String    @db.VarChar(250)
+    createdAt DateTime  @default(now()) @map("created_at")
+    updatedAt DateTime? @updatedAt @map("updated_at")
+
+    admins Admin[] @relation(name: "AdminImage")
+
+    @@map("file")
+}
+
+model AdminGroup {
+    id        BigInt    @id @default(autoincrement())
+    name      String    @db.VarChar(50)
+    createdAt DateTime  @default(now()) @map("created_at")
+    updatedAt DateTime? @updatedAt @map("updated_at")
+
+    admins Admin[] @relation(name: "AdminGroup")
+
+    @@map("admin_group")
+}
+
+model Admin {
+    id           BigInt     @id @default(autoincrement())
+    name         String     @db.VarChar(50)
+    email        String     @unique @db.VarChar(150)
+    status       StatusType
+    password     String     @db.VarChar(200)
+    levelId      BigInt     @map("level_id")
+    imageId      BigInt?    @map("image_id")
+    adminGroupId BigInt     @map("admin_group_id")
+    createdAt    DateTime   @default(now()) @map("created_at")
+    updatedAt    DateTime?  @updatedAt @map("updated_at")
+
+    level Level      @relation(name: "AdminLevel", fields: [levelId], references: [id], onDelete: Cascade)
+    image File?      @relation(name: "AdminImage", fields: [imageId], references: [id], onDelete: Cascade)
+    group AdminGroup @relation(name: "AdminGroup", fields: [adminGroupId], references: [id], onDelete: Cascade)
+
+    @@map("admin")
+}
