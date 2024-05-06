@@ -50,42 +50,39 @@ const createBodySchema = z
         required_error: 'This field is required',
         invalid_type_error: 'The field format must be string',
       })
-      .nonempty('The field cannot be empty'),
+      .min(4, { message: 'must have at least 4 characters' }),
     email: z
       .string({
         required_error: 'This field is required',
         invalid_type_error: 'The field format must be string',
       })
-      .nonempty('The field cannot be empty')
       .email('This is not a valid email.'),
     password: z
       .string({
         required_error: 'This field is required',
         invalid_type_error: 'The field format must be string',
       })
-      .nonempty('The field cannot be empty')
       .min(4, { message: 'must have at least 4 characters' }),
     confirmPassword: z
       .string({
         required_error: 'This field is required',
         invalid_type_error: 'The field format must be string',
       })
-      .nonempty('The field cannot be empty')
       .min(4, { message: 'must have at least 4 characters' }),
     status: StatusTypeEnum,
-    level_id: z.coerce
+    level_id: z
       .bigint({
         required_error: 'This field is required',
         invalid_type_error: 'The field format must be number',
       })
       .min(1n, { message: 'This field is required' }),
-    image_id: z.coerce
+    image_id: z
       .bigint({
         required_error: 'This field is required',
         invalid_type_error: 'The field format must be number',
       })
       .optional(),
-    admin_group_id: z.coerce
+    admin_group_id: z
       .bigint({
         required_error: 'This field is required',
         invalid_type_error: 'The field format must be number',

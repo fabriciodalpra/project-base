@@ -1,3 +1,4 @@
+import { UniqueEntityID } from '../src/core/entities/UniqueEntityID';
 import { PrismaClient } from '@prisma/client';
 import { StatusType } from '@prisma/client';
 import { hash } from 'bcryptjs';
@@ -14,17 +15,20 @@ async function main() {
     },
     update: {},
     create: {
+      id: new UniqueEntityID().toValue(),
       name: 'Admin',
       email: 'admin@admin.com',
       status: StatusType.active,
       password: passwordHash,
       level: {
         create: {
+          id: new UniqueEntityID().toValue(),
           name: 'Administrator',
         },
       },
       group: {
         create: {
+          id: new UniqueEntityID().toValue(),
           name: 'Admin',
         },
       },

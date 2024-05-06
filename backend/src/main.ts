@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { EnvService } from './infra/env';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { RedocModule, RedocOptions } from 'nestjs-redoc';
+import { join } from 'path';
 
 (BigInt.prototype as any).toJSON = function () {
   return this.toString();
@@ -35,11 +36,11 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
 
   const redocOptions: RedocOptions = {
-    title: 'Hello Nest',
+    title: 'Project Base',
     logo: {
-      url: 'https://redocly.github.io/redoc/petstore-logo.png',
-      backgroundColor: '#F0F0F0',
-      altText: 'PetStore logo',
+      url: `http://localhost:${port}/document-logo.jpg`,
+      backgroundColor: '#FFFFFF',
+      altText: 'Project Base',
     },
     sortPropsAlphabetically: true,
     hideDownloadButton: false,
@@ -49,12 +50,6 @@ async function bootstrap() {
       user: 'admin',
       password: '123',
     },
-    // tagGroups: [
-    //   {
-    //     name: 'Core resources',
-    //     tags: ['cats'],
-    //   },
-    // ],
   };
   app.enableCors();
 

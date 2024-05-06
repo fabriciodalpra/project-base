@@ -4,6 +4,7 @@ import {
   Controller,
   Get,
   HttpCode,
+  Param,
   Post,
   Query,
   UseInterceptors,
@@ -17,11 +18,15 @@ import { CacheKey } from '@nestjs/cache-manager';
 import { FindAdminUseCase } from '@app/application/base/useCases/Admin/FindAdminUseCase';
 import {
   FindAdminParamSchema,
+  GetAdminParamSchema,
   createAdminBodySchema,
   findAdminParamSchema,
+  getAdminParamSchema,
 } from '../validations/AdminValidations';
 import { ZodValidationPipe } from '../pipes/ZodValidationPipe';
 import { Admin } from '@app/domain/base/Admin';
+import { ApiResponseMapper } from './mapper/ApiResponseMapper';
+import { GetAdminUseCase } from '@app/application/base/useCases/Admin/GetAdminUseCase';
 
 //@ApiSecurity('basic')
 //@ApiBearerAuth()
@@ -31,17 +36,29 @@ export class AdminController {
   constructor(
     private createAdminUseCase: CreateAdminUseCase,
     private findAdminUseCase: FindAdminUseCase,
+    private getAdminUseCase: GetAdminUseCase,
   ) {}
 
   @Get('')
   @CacheKey('admins')
   @UseInterceptors(HttpCacheInterceptor)
   @UsePipes(new ZodValidationPipe(findAdminParamSchema))
-  @ApiOperation({ summary: 'Get admin' })
-  getAll(@Query() query: FindAdminParamSchema) {
+  @ApiOperation({ summary: 'Find admin' })
+  findAll(@Query() query: FindAdminParamSchema) {
     const { page } = query;
     const response = this.findAdminUseCase.execute({ page });
-    return response;
+    return new ApiResponseMapper(response).toJson();
+  }
+
+  @Get(':id')
+  @CacheKey('admins')
+  @UseInterceptors(HttpCacheInterceptor)
+  @UsePipes(new ZodValidationPipe(getAdminParamSchema))
+  @ApiOperation({ summary: 'Get admin' })
+  getAll(@Param() params: GetAdminParamSchema) {
+    const { id } = params;
+    const response = this.getAdminUseCase.execute({ id });
+    return new ApiResponseMapper(response).toJson();
   }
 
   @Post('')
@@ -60,6 +77,6 @@ export class AdminController {
     if (response.isError()) {
       throw new BadRequestException(response.data.toString());
     }
-    return response.data;
+    return new ApiResponseMapper(response.data).toJson();
   }
 }
