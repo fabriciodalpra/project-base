@@ -2,7 +2,7 @@ import { Admin } from '@app/domain/base/Admin';
 import { FindAdminFactory } from 'src/test/factory/FindAdminFactory';
 import { describe, expect, it } from 'vitest';
 
-describe('Get Admin', () => {
+describe('Find Admin', () => {
   it('should be able to find the admins', async () => {
     const { findAdminUseCase, inMemoryAdminRepository, level, adminGroup } =
       await FindAdminFactory();

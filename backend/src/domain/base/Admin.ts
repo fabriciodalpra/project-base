@@ -1,9 +1,9 @@
-import { Entity } from '@app/core/entities/Entity';
 import { StatusType } from '@app/core/entities/StatusTypes';
 import { UniqueEntityID } from '@app/core/entities/UniqueEntityID';
 import { Level } from './Level';
 import { AdminGroup } from './AdminGroup';
 import { Image } from './Image';
+import { AggregateRoot } from '@app/core/entities/aggregateRoot';
 
 export interface AdminProps {
   id?: UniqueEntityID | null;
@@ -16,7 +16,7 @@ export interface AdminProps {
   adminGroup: AdminGroup;
 }
 
-export class Admin extends Entity<AdminProps> {
+export class Admin extends AggregateRoot<AdminProps> {
   constructor(props: AdminProps, id?: UniqueEntityID) {
     super(props, id);
   }
