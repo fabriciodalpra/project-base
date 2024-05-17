@@ -1,3 +1,4 @@
+import { config } from 'dotenv';
 import { defineConfig } from 'vitest/config';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
@@ -17,6 +18,9 @@ export default defineConfig({
         '**/src/infra/http/validations/**',
         '**/src/infra/http/dto/**',
       ],
+    },
+    env: {
+      ...config({ path: '.env.test' }).parsed,
     },
   },
 });

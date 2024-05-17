@@ -3,7 +3,7 @@ import { Admin } from '@app/domain/base/Admin';
 import { GetAdminFactory } from 'src/test/factory/GetAdminFactory';
 import { describe, expect, it } from 'vitest';
 
-describe('Gwr Admin', () => {
+describe('Get Admin', () => {
   it('should be able to get the admin', async () => {
     const { getAdminUseCase, inMemoryAdminRepository, level, adminGroup } =
       await GetAdminFactory();

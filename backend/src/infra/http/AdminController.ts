@@ -2,11 +2,13 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   Param,
   Post,
   Query,
+  UseGuards,
   UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
@@ -27,6 +29,8 @@ import { ZodValidationPipe } from '../pipes/ZodValidationPipe';
 import { Admin } from '@app/domain/base/Admin';
 import { ApiResponseMapper } from './mapper/ApiResponseMapper';
 import { GetAdminUseCase } from '@app/application/base/useCases/Admin/GetAdminUseCase';
+import { AuthGuard } from '@nestjs/passport';
+import { DeleteAdminUseCase } from '@app/application/base/useCases/Admin/DeleteAdminUseCase';
 
 //@ApiSecurity('basic')
 //@ApiBearerAuth()
@@ -37,6 +41,7 @@ export class AdminController {
     private createAdminUseCase: CreateAdminUseCase,
     private findAdminUseCase: FindAdminUseCase,
     private getAdminUseCase: GetAdminUseCase,
+    private deleteAdminUseCase: DeleteAdminUseCase,
   ) {}
 
   @Get('')
@@ -44,6 +49,7 @@ export class AdminController {
   @UseInterceptors(HttpCacheInterceptor)
   @UsePipes(new ZodValidationPipe(findAdminParamSchema))
   @ApiOperation({ summary: 'Find admin' })
+  @UseGuards(AuthGuard('jwt'))
   findAll(@Query() query: FindAdminParamSchema) {
     const { page } = query;
     const response = this.findAdminUseCase.execute({ page });
@@ -55,9 +61,22 @@ export class AdminController {
   @UseInterceptors(HttpCacheInterceptor)
   @UsePipes(new ZodValidationPipe(getAdminParamSchema))
   @ApiOperation({ summary: 'Get admin' })
-  getAll(@Param() params: GetAdminParamSchema) {
+  @UseGuards(AuthGuard('jwt'))
+  get(@Param() params: GetAdminParamSchema) {
     const { id } = params;
     const response = this.getAdminUseCase.execute({ id });
+    return new ApiResponseMapper(response).toJson();
+  }
+
+  @Delete(':id')
+  @CacheKey('admins')
+  @UseInterceptors(HttpCacheInterceptor)
+  @UsePipes(new ZodValidationPipe(getAdminParamSchema))
+  @ApiOperation({ summary: 'Delete admin' })
+  @UseGuards(AuthGuard('jwt'))
+  delete(@Param() params: GetAdminParamSchema) {
+    const { id } = params;
+    const response = this.deleteAdminUseCase.execute({ id });
     return new ApiResponseMapper(response).toJson();
   }
 

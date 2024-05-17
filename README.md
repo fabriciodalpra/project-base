@@ -52,7 +52,10 @@ To authenticate to the api, use the email: "admin@admin.com" and the password "a
 
 -   [x] it is should be able to create new users;
 -   [x] it is should be able authenticate;
--   [x] it is should be able get users when authenticated;
+-   [x] it is should be able update user when authenticated;
+-   [x] it is should be able list users when authenticated;
+-   [x] it is should be able get user when authenticated;
+-   [x] it is should be able delete user when authenticated;
 
 ### RNs (Business rules)
 

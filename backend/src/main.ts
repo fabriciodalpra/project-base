@@ -1,9 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { EnvService } from './infra/env';
+import { Env, EnvService } from './infra/env';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { RedocModule, RedocOptions } from 'nestjs-redoc';
-import { join } from 'path';
+import { ConfigService } from '@nestjs/config';
 
 (BigInt.prototype as any).toJSON = function () {
   return this.toString();
@@ -16,13 +16,13 @@ async function bootstrap() {
     // logger: false,
   });
 
-  const configService = app.get(EnvService);
-  const port = configService.get('PORT');
+  const configService: ConfigService<Env, true> = app.get(EnvService);
+  const port = configService.get('PORT', { infer: true });
 
   function getSwaggerServerUrl() {
     switch (process.env.NODE_ENV) {
       case 'production':
-        return 'https://nestjs-base-project-alpha.vercel.app';
+        return 'https://localhost';
       default:
         return `http://localhost:${port}`;
     }

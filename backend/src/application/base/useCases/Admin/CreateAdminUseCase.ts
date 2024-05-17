@@ -3,7 +3,7 @@ import { Admin } from '@app/domain/base/Admin';
 import { File } from '@app/domain/base/File';
 import { AdminRepository } from '../../ports/AdminRepository';
 import { Result, error, success } from '@app/core/Result';
-import { ResourceAlreadyExists } from '../errors/ResourceAlreadyExists';
+import { ResourceAlreadyExistsError } from '../errors/ResourceAlreadyExistsError';
 import { StatusType } from '@app/core/entities/StatusTypes';
 import { LevelRepository } from '../../ports/LevelRepository';
 import { ResourceNotFoundError } from '../errors/ResourceNotFoundError';
@@ -22,7 +22,10 @@ interface CreateAdminUseCaseRequest {
   admin_group_id: bigint;
 }
 
-type CreateAdminUseCaseResponse = Result<ResourceAlreadyExists, Admin>;
+type CreateAdminUseCaseResponse = Result<
+  ResourceAlreadyExistsError | ResourceNotFoundError,
+  Admin
+>;
 
 @Injectable()
 export class CreateAdminUseCase {
@@ -45,7 +48,7 @@ export class CreateAdminUseCase {
     const checkAdmin = await this.adminRepository.findByEmail(email);
 
     if (checkAdmin) {
-      return error(new ResourceAlreadyExists('email'));
+      return error(new ResourceAlreadyExistsError('email'));
     }
 
     const levelExists = await this.levelRepository.findById(

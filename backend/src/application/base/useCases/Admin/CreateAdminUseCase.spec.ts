@@ -1,6 +1,6 @@
 import { expect, it, describe } from 'vitest';
 import { Success, Error } from '@app/core/Result';
-import { ResourceAlreadyExists } from '../errors/ResourceAlreadyExists';
+import { ResourceAlreadyExistsError } from '../errors/ResourceAlreadyExistsError';
 import { UniqueEntityID } from '@app/core/entities/UniqueEntityID';
 import { ResourceNotFoundError } from '../errors/ResourceNotFoundError';
 import { CreateAdminFactory } from 'src/test/factory/CreateAdminFactory';
@@ -48,7 +48,7 @@ describe('Create Admin', () => {
     });
 
     expect(admin).instanceOf(Error);
-    expect(admin.data).instanceOf(ResourceAlreadyExists);
+    expect(admin.data).instanceOf(ResourceAlreadyExistsError);
   });
 
   it("shouldn't be able to create new admin widout level", async () => {

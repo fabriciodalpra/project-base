@@ -6,6 +6,10 @@ import { FindAdminUseCase } from '@app/application/base/useCases/Admin/FindAdmin
 import { GetAdminUseCase } from '@app/application/base/useCases/Admin/GetAdminUseCase';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { AuthenticateController } from './AuthenticateController';
+import { AuthenticateAdminUseCase } from '@app/application/base/useCases/Admin/AuthenticateAdminUseCase';
+import { AuthModule } from './auth/auth.module';
+import { DeleteAdminUseCase } from '@app/application/base/useCases/Admin/DeleteAdminUseCase';
 
 @Module({
   imports: [
@@ -13,10 +17,21 @@ import { join } from 'path';
       rootPath: join(__dirname, '../../../../', '/public'),
       serveStaticOptions: { index: false },
     }),
+    AuthModule,
     CacheManagerModule,
   ],
-  controllers: [AdminController],
-  providers: [CreateAdminUseCase, FindAdminUseCase, GetAdminUseCase],
+  controllers: [
+    AdminController,
+    AuthenticateController,
+    AuthenticateController,
+  ],
+  providers: [
+    CreateAdminUseCase,
+    FindAdminUseCase,
+    GetAdminUseCase,
+    DeleteAdminUseCase,
+    AuthenticateAdminUseCase,
+  ],
   exports: [],
 })
 export class HttpModule {}
