@@ -1,8 +1,8 @@
-import { expect, it } from "vitest";
-import { UniqueEntityID } from "./UniqueEntityID";
-import { hasDuplicates } from "src/helpers/objectHelpers";
+import { expect, it } from 'vitest';
+import { UniqueEntityID } from './UniqueEntityID';
+import { hasDuplicates } from 'src/helpers/objectHelpers';
 
-it("should be able to create 10000 Unique IDs not duplicates", () => {
+it('should be able to create 10000 Unique IDs not duplicates', () => {
     const listIDs: UniqueEntityID[] = [];
 
     for (let i = 1; i <= 10000; i++) {

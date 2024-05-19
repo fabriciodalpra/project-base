@@ -10,30 +10,30 @@ import { FileRepository } from '@app/application/base/ports/FileRepository';
 import { InMemoryFileRepository } from './repositories/InMemoryFileRepository';
 
 @Module({
-  imports: [EnvModule],
-  providers: [
-    {
-      provide: AdminGroupRepository,
-      useClass: InMemoryAdminGroupRepository,
-    },
-    {
-      provide: AdminRepository,
-      useClass: InMemoryAdminRepository,
-    },
-    {
-      provide: FileRepository,
-      useClass: InMemoryFileRepository,
-    },
-    {
-      provide: LevelRepository,
-      useClass: InMemoryLevelRepository,
-    },
-  ],
-  exports: [
-    AdminGroupRepository,
-    AdminRepository,
-    FileRepository,
-    LevelRepository,
-  ],
+    imports: [EnvModule],
+    providers: [
+        {
+            provide: AdminGroupRepository,
+            useClass: InMemoryAdminGroupRepository,
+        },
+        {
+            provide: AdminRepository,
+            useClass: InMemoryAdminRepository,
+        },
+        {
+            provide: FileRepository,
+            useClass: InMemoryFileRepository,
+        },
+        {
+            provide: LevelRepository,
+            useClass: InMemoryLevelRepository,
+        },
+    ],
+    exports: [
+        AdminGroupRepository,
+        AdminRepository,
+        FileRepository,
+        LevelRepository,
+    ],
 })
 export class InMemoryModule {}

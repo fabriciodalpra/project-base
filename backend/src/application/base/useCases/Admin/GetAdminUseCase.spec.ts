@@ -1,33 +1,37 @@
 import { UniqueEntityID } from '@app/core/entities/UniqueEntityID';
 import { Admin } from '@app/domain/base/Admin';
+import { hash } from 'bcryptjs';
 import { GetAdminFactory } from 'src/test/factory/GetAdminFactory';
 import { describe, expect, it } from 'vitest';
 
 describe('Get Admin', () => {
-  it('should be able to get the admin', async () => {
-    const { getAdminUseCase, inMemoryAdminRepository, level, adminGroup } =
-      await GetAdminFactory();
+    it('should be able to get the admin', async () => {
+        const { getAdminUseCase, inMemoryAdminRepository, level, adminGroup } =
+            await GetAdminFactory();
 
-    const id = new UniqueEntityID();
+        const id = new UniqueEntityID();
+        const passwordHash = await hash('123456', 8);
 
-    await inMemoryAdminRepository.create(
-      new Admin(
-        {
-          name: `Jon Doe`,
-          email: `jon-doe@email.com`,
-          status: 'active',
-          password: '123456',
-          image: null,
-          level,
-          adminGroup,
-        },
-        id,
-      ),
-    );
+        await inMemoryAdminRepository.create(
+            new Admin(
+                {
+                    name: `Jon Doe`,
+                    email: `jon-doe@email.com`,
+                    status: 'active',
+                    password: passwordHash,
+                    image: null,
+                    level,
+                    adminGroup,
+                },
+                id,
+            ),
+        );
 
-    const admin = await getAdminUseCase.execute({ id: BigInt(id.toNumber()) });
-    expect(admin).contain({
-      id,
+        const admin = await getAdminUseCase.execute({
+            id: BigInt(id.toNumber()),
+        });
+        expect(admin).contain({
+            id,
+        });
     });
-  });
 });

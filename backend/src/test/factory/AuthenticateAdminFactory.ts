@@ -8,42 +8,42 @@ import { InMemoryLevelRepository } from '@app/infra/persistence/inMemory/reposit
 import { JwtService } from '@nestjs/jwt';
 
 export async function AuthenticateAdminFactory() {
-  const inMemoryAdminRepository = new InMemoryAdminRepository();
-  const inMemoryLevelRepository = new InMemoryLevelRepository();
-  const inMemoryAdminGroupRepository = new InMemoryAdminGroupRepository();
+    const inMemoryAdminRepository = new InMemoryAdminRepository();
+    const inMemoryLevelRepository = new InMemoryLevelRepository();
+    const inMemoryAdminGroupRepository = new InMemoryAdminGroupRepository();
 
-  const privateKey: string = process.env.JWT_PRIVATE_KEY || '';
-  const publicKey: string = process.env.JWT_PUBLIC_KEY || '';
+    const privateKey: string = process.env.JWT_PRIVATE_KEY || '';
+    const publicKey: string = process.env.JWT_PUBLIC_KEY || '';
 
-  const jwtService = new JwtService({
-    signOptions: { expiresIn: '60s', algorithm: 'RS256' },
-    privateKey: Buffer.from(privateKey, 'base64'),
-    publicKey: Buffer.from(publicKey, 'base64'),
-  });
+    const jwtService = new JwtService({
+        signOptions: { expiresIn: '60s', algorithm: 'RS256' },
+        privateKey: Buffer.from(privateKey, 'base64'),
+        publicKey: Buffer.from(publicKey, 'base64'),
+    });
 
-  const authenticateAdminUseCase = new AuthenticateAdminUseCase(
-    inMemoryAdminRepository,
-    jwtService,
-  );
+    const authenticateAdminUseCase = new AuthenticateAdminUseCase(
+        inMemoryAdminRepository,
+        jwtService,
+    );
 
-  const level = await inMemoryLevelRepository.create(
-    new Level({
-      id: new UniqueEntityID(),
-      name: 'Admin',
-    }),
-  );
+    const level = await inMemoryLevelRepository.create(
+        new Level({
+            id: new UniqueEntityID(),
+            name: 'Admin',
+        }),
+    );
 
-  const adminGroup = await inMemoryAdminGroupRepository.create(
-    new AdminGroup({
-      id: new UniqueEntityID(),
-      name: 'Admin',
-    }),
-  );
+    const adminGroup = await inMemoryAdminGroupRepository.create(
+        new AdminGroup({
+            id: new UniqueEntityID(),
+            name: 'Admin',
+        }),
+    );
 
-  return {
-    authenticateAdminUseCase,
-    inMemoryAdminRepository,
-    level,
-    adminGroup,
-  };
+    return {
+        authenticateAdminUseCase,
+        inMemoryAdminRepository,
+        level,
+        adminGroup,
+    };
 }

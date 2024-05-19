@@ -11,32 +11,32 @@ import { PrismaLevelRepository } from './repositories/PrismaLevelRepository';
 import { PrismaService } from './prisma.service';
 
 @Module({
-  imports: [EnvModule],
-  providers: [
-    PrismaService,
-    {
-      provide: AdminGroupRepository,
-      useClass: PrismaAdminGroupRepository,
-    },
-    {
-      provide: AdminRepository,
-      useClass: PrismaAdminRepository,
-    },
-    {
-      provide: FileRepository,
-      useClass: PrismaFileRepository,
-    },
-    {
-      provide: LevelRepository,
-      useClass: PrismaLevelRepository,
-    },
-  ],
-  exports: [
-    PrismaService,
-    AdminGroupRepository,
-    AdminRepository,
-    FileRepository,
-    LevelRepository,
-  ],
+    imports: [EnvModule],
+    providers: [
+        PrismaService,
+        {
+            provide: AdminGroupRepository,
+            useClass: PrismaAdminGroupRepository,
+        },
+        {
+            provide: AdminRepository,
+            useClass: PrismaAdminRepository,
+        },
+        {
+            provide: FileRepository,
+            useClass: PrismaFileRepository,
+        },
+        {
+            provide: LevelRepository,
+            useClass: PrismaLevelRepository,
+        },
+    ],
+    exports: [
+        PrismaService,
+        AdminGroupRepository,
+        AdminRepository,
+        FileRepository,
+        LevelRepository,
+    ],
 })
 export class PrismaModule {}

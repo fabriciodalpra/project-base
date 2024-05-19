@@ -7,25 +7,25 @@ import { InMemoryAdminRepository } from '@app/infra/persistence/inMemory/reposit
 import { InMemoryLevelRepository } from '@app/infra/persistence/inMemory/repositories/InMemoryLevelRepository';
 
 export async function DeleteAdminFactory() {
-  const inMemoryAdminRepository = new InMemoryAdminRepository();
-  const inMemoryLevelRepository = new InMemoryLevelRepository();
-  const inMemoryAdminGroupRepository = new InMemoryAdminGroupRepository();
+    const inMemoryAdminRepository = new InMemoryAdminRepository();
+    const inMemoryLevelRepository = new InMemoryLevelRepository();
+    const inMemoryAdminGroupRepository = new InMemoryAdminGroupRepository();
 
-  const deleteAdminUseCase = new DeleteAdminUseCase(inMemoryAdminRepository);
+    const deleteAdminUseCase = new DeleteAdminUseCase(inMemoryAdminRepository);
 
-  const level = await inMemoryLevelRepository.create(
-    new Level({
-      id: new UniqueEntityID(),
-      name: 'Admin',
-    }),
-  );
+    const level = await inMemoryLevelRepository.create(
+        new Level({
+            id: new UniqueEntityID(),
+            name: 'Admin',
+        }),
+    );
 
-  const adminGroup = await inMemoryAdminGroupRepository.create(
-    new AdminGroup({
-      id: new UniqueEntityID(),
-      name: 'Admin',
-    }),
-  );
+    const adminGroup = await inMemoryAdminGroupRepository.create(
+        new AdminGroup({
+            id: new UniqueEntityID(),
+            name: 'Admin',
+        }),
+    );
 
-  return { deleteAdminUseCase, inMemoryAdminRepository, level, adminGroup };
+    return { deleteAdminUseCase, inMemoryAdminRepository, level, adminGroup };
 }

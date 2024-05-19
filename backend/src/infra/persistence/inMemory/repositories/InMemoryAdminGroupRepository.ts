@@ -8,64 +8,64 @@ import { jsonFormatPagination } from 'src/helpers/responseHelpers';
 
 @Injectable()
 export class InMemoryAdminGroupRepository implements AdminGroupRepository {
-  public adminGroups: AdminGroup[] = [];
+    public adminGroups: AdminGroup[] = [];
 
-  async findById(id: UniqueEntityID): Promise<AdminGroup | null> {
-    const adminGroup = this.adminGroups.find((adminGroup) =>
-      adminGroup.id.equals(id),
-    );
-    if (!adminGroup) {
-      return null;
+    async findById(id: UniqueEntityID): Promise<AdminGroup | null> {
+        const adminGroup = this.adminGroups.find((adminGroup) =>
+            adminGroup.id.equals(id),
+        );
+        if (!adminGroup) {
+            return null;
+        }
+        return adminGroup;
     }
-    return adminGroup;
-  }
 
-  async findByName(name: string): Promise<AdminGroup | null> {
-    const adminGroup = this.adminGroups.find(
-      (adminGroup) => adminGroup.name === name,
-    );
-    if (!adminGroup) {
-      return null;
+    async findByName(name: string): Promise<AdminGroup | null> {
+        const adminGroup = this.adminGroups.find(
+            (adminGroup) => adminGroup.name === name,
+        );
+        if (!adminGroup) {
+            return null;
+        }
+        return adminGroup;
     }
-    return adminGroup;
-  }
 
-  async findMany({
-    page,
-  }: PaginationParams): Promise<FindResponse<AdminGroup>> {
-    const itemsPerPage = 20;
-    const adminGroups = this.adminGroups.slice(
-      (page - 1) * itemsPerPage,
-      page * itemsPerPage,
-    );
-    return jsonFormatPagination<AdminGroup[]>(
-      adminGroups,
-      page,
-      this.adminGroups.length,
-      itemsPerPage,
-    );
-  }
-
-  async create(adminGroup: AdminGroup): Promise<AdminGroup> {
-    this.adminGroups = [...this.adminGroups, adminGroup];
-    return adminGroup;
-  }
-
-  async update(adminGroup: AdminGroup): Promise<AdminGroup> {
-    const indexAdminGroup = this.adminGroups.findIndex(
-      (curAdminGroup) => curAdminGroup.id === adminGroup.id,
-    );
-    if (indexAdminGroup != -1) {
-      this.adminGroups[indexAdminGroup] = adminGroup;
+    async findMany({
+        page,
+    }: PaginationParams): Promise<FindResponse<AdminGroup>> {
+        const itemsPerPage = 20;
+        const adminGroups = this.adminGroups.slice(
+            (page - 1) * itemsPerPage,
+            page * itemsPerPage,
+        );
+        return jsonFormatPagination<AdminGroup[]>(
+            adminGroups,
+            page,
+            this.adminGroups.length,
+            itemsPerPage,
+        );
     }
-    return adminGroup;
-  }
 
-  async delete(adminGroup: AdminGroup): Promise<AdminGroup> {
-    const indexAdminGroup = this.adminGroups.findIndex(
-      (curAdminGroup) => curAdminGroup.id === adminGroup.id,
-    );
-    this.adminGroups.splice(indexAdminGroup, 1);
-    return adminGroup;
-  }
+    async create(adminGroup: AdminGroup): Promise<AdminGroup> {
+        this.adminGroups = [...this.adminGroups, adminGroup];
+        return adminGroup;
+    }
+
+    async update(adminGroup: AdminGroup): Promise<AdminGroup> {
+        const indexAdminGroup = this.adminGroups.findIndex(
+            (curAdminGroup) => curAdminGroup.id === adminGroup.id,
+        );
+        if (indexAdminGroup != -1) {
+            this.adminGroups[indexAdminGroup] = adminGroup;
+        }
+        return adminGroup;
+    }
+
+    async delete(adminGroup: AdminGroup): Promise<AdminGroup> {
+        const indexAdminGroup = this.adminGroups.findIndex(
+            (curAdminGroup) => curAdminGroup.id === adminGroup.id,
+        );
+        this.adminGroups.splice(indexAdminGroup, 1);
+        return adminGroup;
+    }
 }

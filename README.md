@@ -18,6 +18,7 @@ To run this project, you will need to add the following environment variables to
 ```bash
 $ yarn install
 $ npx prisma generate dev
+$ npx prisma migrate dev
 $ npx prisma db seed
 ```
 
@@ -52,7 +53,8 @@ To authenticate to the api, use the email: "admin@admin.com" and the password "a
 
 -   [x] it is should be able to create new users;
 -   [x] it is should be able authenticate;
--   [ ] it is should be able update user when authenticated;
+-   [x] it is should be able update user when authenticated;
+-   [x] it is should be able update user password when authenticated;
 -   [x] it is should be able list users when authenticated;
 -   [x] it is should be able get user when authenticated;
 -   [x] it is should be able delete user when authenticated;

@@ -7,24 +7,24 @@ import { InMemoryAdminRepository } from '@app/infra/persistence/inMemory/reposit
 import { InMemoryLevelRepository } from '@app/infra/persistence/inMemory/repositories/InMemoryLevelRepository';
 
 export async function FindAdminFactory() {
-  const inMemoryAdminRepository = new InMemoryAdminRepository();
-  const inMemoryLevelRepository = new InMemoryLevelRepository();
-  const inMemoryAdminGroupRepository = new InMemoryAdminGroupRepository();
-  const findAdminUseCase = new FindAdminUseCase(inMemoryAdminRepository);
+    const inMemoryAdminRepository = new InMemoryAdminRepository();
+    const inMemoryLevelRepository = new InMemoryLevelRepository();
+    const inMemoryAdminGroupRepository = new InMemoryAdminGroupRepository();
+    const findAdminUseCase = new FindAdminUseCase(inMemoryAdminRepository);
 
-  const level = await inMemoryLevelRepository.create(
-    new Level({
-      id: new UniqueEntityID(),
-      name: 'Admin',
-    }),
-  );
+    const level = await inMemoryLevelRepository.create(
+        new Level({
+            id: new UniqueEntityID(),
+            name: 'Admin',
+        }),
+    );
 
-  const adminGroup = await inMemoryAdminGroupRepository.create(
-    new AdminGroup({
-      id: new UniqueEntityID(),
-      name: 'Admin',
-    }),
-  );
+    const adminGroup = await inMemoryAdminGroupRepository.create(
+        new AdminGroup({
+            id: new UniqueEntityID(),
+            name: 'Admin',
+        }),
+    );
 
-  return { findAdminUseCase, inMemoryAdminRepository, level, adminGroup };
+    return { findAdminUseCase, inMemoryAdminRepository, level, adminGroup };
 }

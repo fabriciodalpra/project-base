@@ -1,1 +1,1 @@
-export type StatusType = "active" | "inative" | "pending";
+export type StatusType = 'active' | 'inative' | 'pending';
