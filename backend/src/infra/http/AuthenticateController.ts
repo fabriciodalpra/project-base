@@ -1,11 +1,5 @@
 import { AuthenticateAdminUseCase } from '@app/application/base/useCases/Admin/AuthenticateAdminUseCase';
-import {
-    BadRequestException,
-    Body,
-    Controller,
-    Post,
-    UsePipes,
-} from '@nestjs/common';
+import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ZodValidationPipe } from 'nestjs-zod';
 import { LoginAdminBodyDto } from './dto/LoginAdmin.dto';
@@ -17,9 +11,11 @@ export class AuthenticateController {
     constructor(private authenticateAdminUseCase: AuthenticateAdminUseCase) {}
 
     @Post('login')
-    @UsePipes(new ZodValidationPipe(authenticateAdminBodySchema))
     @ApiOperation({ summary: 'Login' })
-    async login(@Body() body: LoginAdminBodyDto) {
+    async login(
+        @Body(new ZodValidationPipe(authenticateAdminBodySchema))
+        body: LoginAdminBodyDto,
+    ) {
         const authenticate = body;
         const response =
             await this.authenticateAdminUseCase.execute(authenticate);

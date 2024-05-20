@@ -20,7 +20,6 @@ import {
     Query,
     UseGuards,
     UseInterceptors,
-    UsePipes,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -65,10 +64,12 @@ export class AdminController {
     @Get('')
     @CacheKey('admins')
     @UseInterceptors(HttpCacheInterceptor)
-    @UsePipes(new ZodValidationPipe(findAdminParamsSchema))
     @ApiOperation({ summary: 'Find admin' })
     @UseGuards(AuthGuard('jwt'))
-    findAll(@Query() query: FindAdminParamsDto) {
+    findAll(
+        @Query(new ZodValidationPipe(findAdminParamsSchema))
+        query: FindAdminParamsDto,
+    ) {
         const { page } = query;
         const response = this.findAdminUseCase.execute({ page });
         return new ApiResponseMapper(response).toJson();
@@ -77,10 +78,12 @@ export class AdminController {
     @Get(':id')
     @CacheKey('admins')
     @UseInterceptors(HttpCacheInterceptor)
-    @UsePipes(new ZodValidationPipe(getAdminParamsSchema))
     @ApiOperation({ summary: 'Get admin' })
     @UseGuards(AuthGuard('jwt'))
-    get(@Param() params: GetAdminParamsDto) {
+    get(
+        @Param(new ZodValidationPipe(getAdminParamsSchema))
+        params: GetAdminParamsDto,
+    ) {
         const { id } = params;
         const response = this.getAdminUseCase.execute({ id });
         return new ApiResponseMapper(response).toJson();
@@ -89,10 +92,12 @@ export class AdminController {
     @Delete(':id')
     @CacheKey('admins')
     @UseInterceptors(HttpCacheInterceptor)
-    @UsePipes(new ZodValidationPipe(getAdminParamsSchema))
     @ApiOperation({ summary: 'Delete admin' })
     @UseGuards(AuthGuard('jwt'))
-    delete(@Param() params: DeleteAdminParamsDto) {
+    delete(
+        @Param(new ZodValidationPipe(getAdminParamsSchema))
+        params: DeleteAdminParamsDto,
+    ) {
         const { id } = params;
         const response = this.deleteAdminUseCase.execute({ id });
         return new ApiResponseMapper(response).toJson();
@@ -100,8 +105,6 @@ export class AdminController {
 
     @Put(':id')
     @HttpCode(201)
-    @UsePipes(new ZodValidationPipe(updateAdminBodySchema))
-    @UsePipes(new ZodValidationPipe(updateAdminParamsSchema))
     @ApiOperation({ summary: 'Update admin' })
     @ApiResponse({
         status: 201,
@@ -110,8 +113,10 @@ export class AdminController {
     })
     @ApiResponse({ status: 400, description: 'Forbidden.' })
     async update(
-        @Param() params: UpdateAdminParamsDto,
-        @Body() body: UpdateAdminBodyDto,
+        @Param(new ZodValidationPipe(updateAdminParamsSchema))
+        params: UpdateAdminParamsDto,
+        @Body(new ZodValidationPipe(updateAdminBodySchema))
+        body: UpdateAdminBodyDto,
     ) {
         const { id } = params;
         const admin = body;
@@ -127,10 +132,6 @@ export class AdminController {
 
     @Patch(':id/change-password')
     @HttpCode(201)
-    @UsePipes(
-        new ZodValidationPipe(updateAdminPasswordParamsSchema),
-        new ZodValidationPipe(updateAdminPasswordBodySchema),
-    )
     @ApiOperation({ summary: 'Update password admin' })
     @ApiResponse({
         status: 201,
@@ -139,8 +140,10 @@ export class AdminController {
     })
     @ApiResponse({ status: 400, description: 'Forbidden.' })
     async updatePassword(
-        @Param() params: UpdatePasswordAdminParamsDto,
-        @Body() body: UpdatePasswordAdminBodyDto,
+        @Param(new ZodValidationPipe(updateAdminPasswordParamsSchema))
+        params: UpdatePasswordAdminParamsDto,
+        @Body(new ZodValidationPipe(updateAdminPasswordBodySchema))
+        body: UpdatePasswordAdminBodyDto,
     ) {
         const { id } = params;
         const admin = body;
@@ -156,7 +159,6 @@ export class AdminController {
 
     @Post('')
     @HttpCode(201)
-    @UsePipes(new ZodValidationPipe(createAdminBodySchema))
     @ApiOperation({ summary: 'Create admin' })
     @ApiResponse({
         status: 201,
@@ -164,7 +166,10 @@ export class AdminController {
         type: () => Admin,
     })
     @ApiResponse({ status: 400, description: 'Forbidden.' })
-    async create(@Body() body: CreateAdminBodyDto) {
+    async create(
+        @Body(new ZodValidationPipe(createAdminBodySchema))
+        body: CreateAdminBodyDto,
+    ) {
         const admin = body;
         const response = await this.createAdminUseCase.execute(admin);
         if (response.isError()) {
